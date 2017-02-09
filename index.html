@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Raycaster Demo</title>
+	<style type="text/css">
+	  * {
+			box-sizing: border-box;
+		}
+
+		html, body {
+			padding: 0;
+			margin: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		canvas {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+	<script type="text/javascript" src="verge.js"></script>
+	<script type="text/javascript" src="frame_rate.js"></script>
+	<script type="text/javascript" src="vector.js"></script>
+	<script type="text/javascript" src="random_maze_map.js"></script>
+	<script type="text/javascript" src="engine.js"></script>
+	<script type="text/javascript">
+		var canvas;
+		var context;
+		var fr;
+		var scene;
+
+		function doResize() {
+			var viewport = verge.viewport();
+			canvas.width = viewport.width;
+			canvas.height = viewport.height;
+		}
+
+		window.addEventListener("load", function() {
+			canvas = document.createElement("canvas");
+			context = canvas.getContext("2d");
+			context.translate(0.5, 0.5);
+			fr = new FrameRate();
+			scene = new Engine();
+
+			document.body.appendChild(canvas);
+
+			doResize();
+			requestAnimationFrame(doAnimation);
+		});
+
+		window.addEventListener("resize", doResize);
+
+		function doAnimation() {
+			fr.tick();
+			scene.render(canvas, context);
+
+			context.fillStyle = "#0000ff";
+			context.font = (canvas.height / 50) + "px sans-serif";
+			context.textBaseline = "hanging";
+			context.fillText(fr.rate + " FPS", 5, 5);
+
+			scene.tick();
+
+			requestAnimationFrame(doAnimation);
+		}
+	</script>
+</head>
+<body></body>
+</html>
